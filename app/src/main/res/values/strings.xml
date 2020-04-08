@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">API通信テスト</string>
+    <string name="bt_click">保存</string>
+    <string name="post_name">郵便番号を入力してください</string>
+    <string name="tv_winfo_title">郵便番号の住所詳細</string>
+</resources>
+
