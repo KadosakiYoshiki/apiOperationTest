@@ -1,14 +1,18 @@
 package com.example.kotlinapitest
 
+import android.net.wifi.WifiManager
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import com.github.kittinunf.fuel.*
+import com.github.kittinunf.fuel.core.FuelManager
 import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
+import com.github.kittinunf.result.Result
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                     //都市データを格納するMutableMapオブジェクトの用意とcityListへのデータ登録。
 
                     //val st = "1240004"
-                    var city = mutableMapOf("name" to "郵便番号; " + st, "id" to st)
+                    var city = mutableMapOf("name" to "ディレクトリ; " + st, "id" to st)
                     cityList.add(city)
                     //SimpleAdapterで使用するfrom-to用変数の用意。
                     val from = arrayOf("name")
@@ -79,16 +83,18 @@ class MainActivity : AppCompatActivity() {
             val cityId = item["id"]
             //取得した都市名をtvCityNameに設定。
             val tvCityName = findViewById<TextView>(R.id.tvCityName)
-            tvCityName.setText(cityId + "の住所: ")
+            tvCityName.setText(cityId + "の情報: ")
             //選択されたラジオボタングループの値を取得。
             //ラジオボタングループで選択されている値を取得
             val rgRequest: RadioGroup = findViewById(R.id.rgRequest)
             val id: Int = rgRequest.checkedRadioButtonId
             val radioButton: RadioButton = rgRequest.findViewById(id)
+            //editJsonで入力された内容を取得。
+            val textJson = findViewById<TextView>(R.id.editJson).text.toString()
             //WeatherInfoReceiverインスタンスを生成。
             val receiver = WeatherInfoReceiver()
             //WeatherInfoReceiverを実行。
-            receiver.execute(cityId, radioButton.text.toString())
+            receiver.execute(cityId, radioButton.text.toString(), textJson)
         }
     }
     /**
@@ -107,6 +113,7 @@ class MainActivity : AppCompatActivity() {
             val con = url.openConnection() as HttpURLConnection
             //http接続メソッドを設定。
             con.requestMethod = params[1]
+            /*
             //接続。
             con.connect()
             //HttpURLConnectionオブジェクトからレスポンスデータを取得。天気情報が格納されている。
@@ -120,7 +127,43 @@ class MainActivity : AppCompatActivity() {
             //JSON文字列を返す。
             return result
 
+             */
+            val result: String = ""
+            val httpReq = params[1]
+            when (httpReq) {
+                "GET" -> {
+                    // bodyを含まない場合はhttpXXXを使用する
+                    var triple = urlStr.httpGet().response()
+                    return (String(triple.second.data))
+                }
+                "DELETE" -> {
+                    var triple = urlStr.httpDelete().response()
+                    return (String(triple.second.data))
+                }
+                "POST" -> {
+                    // bodyを含む場合はにはFuelクラスを使用する
+                    val bodyJson = params[2]
+                    var triple = Fuel.post(urlStr)
+                        .header("Content-Type" to "application/json")
+                        .body(bodyJson)
+                        .response()
+                    return (String(triple.second.data))
+                }
+                "PUT" -> {
+                    val bodyJson = params[2]
+                    var triple = Fuel.put(urlStr)
+                        .header("Content-Type" to "application/json")
+                        .body(bodyJson)
+                        .response()
+                    return (String(triple.second.data))
+                }
+                else -> {
+                    val triple = "GET, DELETE, POST, PUTいずれかを選択してください"
+                    return triple
+                }
+            }
         }
+
         override fun onPostExecute(result: String) {
             val tvWeatherDesc = findViewById<TextView>(R.id.tvWeatherDesc)
             //tvWeatherTelop.text = telop

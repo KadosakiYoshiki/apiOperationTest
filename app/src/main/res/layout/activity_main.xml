@@ -29,21 +29,35 @@
         android:id="@+id/rgRequest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <RadioButton
             android:id="@+id/radioButtonGet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="GET" />
-
+        <RadioButton
+            android:id="@+id/radioButtonPost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="POST" />
+        <RadioButton
+            android:id="@+id/radioButtonPut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PUT" />
         <RadioButton
             android:id="@+id/radioButtonDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="DELETE" />
-
-
     </RadioGroup>
+
+    <EditText
+        android:id="@+id/editJson"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine" />
 
     <ListView
         android:id="@+id/lvCityList"
@@ -98,4 +112,5 @@
                 android:textSize="20sp" />
         </ScrollView>
     </LinearLayout>
+
 </LinearLayout>

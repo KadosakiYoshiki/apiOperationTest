@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">API通信テスト</string>
     <string name="bt_click">保存</string>
-    <string name="post_name">郵便番号を入力してください</string>
-    <string name="tv_winfo_title">郵便番号の住所詳細</string>
+    <string name="post_name">ディレクトリを入力してください</string>
+    <string name="tv_winfo_title">詳細</string>
 </resources>
 
